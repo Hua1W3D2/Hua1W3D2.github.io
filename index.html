@@ -1,1 +1,527 @@
-<h1> Hello World </h1>
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>集中实习 Spring Boot 后端课程</title>
+    <style>
+        :root {
+            --bg: #f6f8fb;
+            --panel: #ffffff;
+            --text: #1f2937;
+            --muted: #667085;
+            --line: #dbe3ef;
+            --green: #19be6b;
+            --blue: #2f80ed;
+            --orange: #ff8a00;
+            --red: #ef4444;
+            --shadow: 0 18px 45px rgba(20, 40, 80, .10);
+        }
+
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+            color: var(--text);
+            background: var(--bg);
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+            padding: 0 8vw;
+            background: rgba(255,255,255,.88);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(219,227,239,.8);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+        }
+
+        .logo {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            color: white;
+            background: linear-gradient(135deg, var(--green), var(--blue));
+            box-shadow: 0 10px 24px rgba(25,190,107,.25);
+        }
+
+        nav a {
+            margin-left: 22px;
+            color: #344054;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        nav a:hover { color: var(--green); }
+
+        .hero {
+            padding: 78px 8vw 44px;
+            display: grid;
+            grid-template-columns: 1.05fr .95fr;
+            gap: 42px;
+            align-items: center;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            gap: 8px;
+            align-items: center;
+            padding: 7px 12px;
+            border-radius: 999px;
+            background: #e9f9f1;
+            color: #087f46;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        h1 {
+            margin: 18px 0 16px;
+            font-size: clamp(36px, 5vw, 62px);
+            line-height: 1.05;
+            letter-spacing: 0;
+        }
+
+        .hero p {
+            max-width: 680px;
+            color: var(--muted);
+            font-size: 18px;
+            line-height: 1.8;
+        }
+
+        .actions {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-top: 28px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            padding: 0 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 800;
+            border: 1px solid transparent;
+        }
+
+        .btn.primary {
+            background: var(--green);
+            color: white;
+            box-shadow: 0 12px 24px rgba(25,190,107,.28);
+        }
+
+        .btn.secondary {
+            background: white;
+            color: #344054;
+            border-color: var(--line);
+        }
+
+        .hero-card {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .terminal {
+            border-radius: 12px;
+            overflow: hidden;
+            background: #0f172a;
+            color: #d1fae5;
+            font-family: Consolas, Monaco, monospace;
+            font-size: 14px;
+        }
+
+        .terminal-head {
+            display: flex;
+            gap: 7px;
+            padding: 12px;
+            background: #111827;
+        }
+
+        .dot { width: 10px; height: 10px; border-radius: 50%; }
+        .dot.red { background: #ff5f56; }
+        .dot.yellow { background: #ffbd2e; }
+        .dot.green { background: #27c93f; }
+
+        .terminal-body {
+            padding: 18px;
+            line-height: 1.9;
+            white-space: pre-wrap;
+        }
+
+        section {
+            padding: 36px 8vw;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 24px;
+            margin-bottom: 18px;
+        }
+
+        .section-title h2 {
+            margin: 0;
+            font-size: 30px;
+        }
+
+        .section-title p {
+            margin: 0;
+            color: var(--muted);
+        }
+
+        .map-wrap {
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            padding: 18px;
+            box-shadow: var(--shadow);
+            overflow-x: auto;
+        }
+
+        svg {
+            display: block;
+            min-width: 980px;
+            width: 100%;
+            height: auto;
+        }
+
+        .node rect {
+            transition: transform .2s ease, filter .2s ease;
+            filter: drop-shadow(0 8px 18px rgba(30,50,80,.10));
+        }
+
+        .node:hover rect {
+            transform: translateY(-3px);
+            filter: drop-shadow(0 14px 24px rgba(30,50,80,.18));
+        }
+
+        .node text {
+            pointer-events: none;
+            font-weight: 800;
+        }
+
+        .hint {
+            margin-top: 12px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 22px;
+            box-shadow: 0 12px 28px rgba(20,40,80,.06);
+        }
+
+        .card h3 { margin: 0 0 10px; }
+        .card p { margin: 0; color: var(--muted); line-height: 1.75; }
+
+        details {
+            margin-top: 14px;
+            background: #fbfcff;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            padding: 14px;
+        }
+
+        summary {
+            cursor: pointer;
+            font-weight: 800;
+        }
+
+        .code {
+            margin-top: 12px;
+            padding: 14px;
+            border-radius: 10px;
+            background: #0f172a;
+            color: #d1fae5;
+            overflow-x: auto;
+            font-family: Consolas, Monaco, monospace;
+            font-size: 13px;
+        }
+
+        .timeline {
+            display: grid;
+            gap: 14px;
+        }
+
+        .step {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 18px;
+            align-items: start;
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 18px;
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 32px;
+            padding: 0 10px;
+            border-radius: 999px;
+            background: #e9f9f1;
+            color: #087f46;
+            font-weight: 800;
+            font-size: 13px;
+        }
+
+        footer {
+            padding: 34px 8vw 60px;
+            color: var(--muted);
+            text-align: center;
+        }
+
+        @media (max-width: 900px) {
+            .hero { grid-template-columns: 1fr; }
+            nav { display: none; }
+            .grid { grid-template-columns: 1fr; }
+            .step { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+
+<body>
+<header class="topbar">
+    <div class="brand">
+        <div class="logo">SB</div>
+        <span>集中实习课程文档</span>
+    </div>
+    <nav>
+        <a href="#map">知识地图</a>
+        <a href="#courses">课程章节</a>
+        <a href="#run">运行指南</a>
+        <a href="#deploy">部署说明</a>
+    </nav>
+</header>
+
+<main>
+    <section class="hero">
+        <div>
+            <span class="eyebrow">Spring Boot 3 · Java 17 · 后端实习路线</span>
+            <h1>从自动装配到权限控制的后端工程训练</h1>
+            <p>
+                这是一套面向实习课程的 Spring Boot 后端学习项目。课程从自动配置与自定义 Starter 开始，
+                进入 MyBatis-Plus 数据持久化，再完成 Sa-Token 登录认证与接口鉴权。
+            </p>
+            <div class="actions">
+                <a class="btn primary" href="#map">查看知识地图</a>
+                <a class="btn secondary" href="#courses">开始学习</a>
+            </div>
+        </div>
+
+        <div class="hero-card">
+            <div class="terminal">
+                <div class="terminal-head">
+                    <span class="dot red"></span>
+                    <span class="dot yellow"></span>
+                    <span class="dot green"></span>
+                </div>
+                <div class="terminal-body">git clone https://gitee.com/flower-dance-butterfly/experi2026.git
+                    cd day01
+                    mvn spring-boot:run
+
+                    # Day02: 数据查询
+                    # Day03: Token 认证 + 权限校验</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="map">
+        <div class="section-title">
+            <div>
+                <h2>XMind 风格知识地图</h2>
+                <p>点击节点可跳转到对应课程章节。</p>
+            </div>
+        </div>
+
+        <div class="map-wrap">
+            <svg viewBox="0 0 1180 620" role="img" aria-label="Spring Boot 后端实习课程知识地图">
+                <defs>
+                    <linearGradient id="centerGrad" x1="0" x2="1">
+                        <stop offset="0%" stop-color="#19be6b"/>
+                        <stop offset="100%" stop-color="#2f80ed"/>
+                    </linearGradient>
+                </defs>
+
+                <path d="M590 305 C430 210, 330 170, 220 155" stroke="#a7b7cc" stroke-width="4" fill="none"/>
+                <path d="M590 305 C430 315, 330 310, 220 305" stroke="#a7b7cc" stroke-width="4" fill="none"/>
+                <path d="M590 305 C430 420, 330 460, 220 465" stroke="#a7b7cc" stroke-width="4" fill="none"/>
+
+                <path d="M590 305 C750 190, 850 145, 970 130" stroke="#a7b7cc" stroke-width="4" fill="none"/>
+                <path d="M590 305 C760 285, 860 285, 980 285" stroke="#a7b7cc" stroke-width="4" fill="none"/>
+                <path d="M590 305 C750 420, 850 475, 970 490" stroke="#a7b7cc" stroke-width="4" fill="none"/>
+
+                <a href="#courses" class="node">
+                    <rect x="420" y="245" width="340" height="120" rx="22" fill="url(#centerGrad)"/>
+                    <text x="590" y="295" text-anchor="middle" font-size="26" fill="#fff">Spring Boot 后端实习</text>
+                    <text x="590" y="330" text-anchor="middle" font-size="15" fill="#e8fff5">自动配置 · 数据持久化 · 认证鉴权</text>
+                </a>
+
+                <a href="#day01" class="node">
+                    <rect x="60" y="105" width="250" height="96" rx="18" fill="#ffffff" stroke="#19be6b" stroke-width="3"/>
+                    <text x="185" y="145" text-anchor="middle" font-size="20" fill="#087f46">Day 01</text>
+                    <text x="185" y="174" text-anchor="middle" font-size="15" fill="#344054">自动装配与 Starter</text>
+                </a>
+
+                <a href="#day02" class="node">
+                    <rect x="60" y="257" width="250" height="96" rx="18" fill="#ffffff" stroke="#2f80ed" stroke-width="3"/>
+                    <text x="185" y="297" text-anchor="middle" font-size="20" fill="#1d4ed8">Day 02</text>
+                    <text x="185" y="326" text-anchor="middle" font-size="15" fill="#344054">MyBatis-Plus 整合</text>
+                </a>
+
+                <a href="#day03" class="node">
+                    <rect x="60" y="417" width="250" height="96" rx="18" fill="#ffffff" stroke="#ef4444" stroke-width="3"/>
+                    <text x="185" y="457" text-anchor="middle" font-size="20" fill="#b91c1c">Day 03</text>
+                    <text x="185" y="486" text-anchor="middle" font-size="15" fill="#344054">Sa-Token 认证鉴权</text>
+                </a>
+
+                <a href="#run" class="node">
+                    <rect x="900" y="82" width="230" height="96" rx="18" fill="#ffffff" stroke="#ff8a00" stroke-width="3"/>
+                    <text x="1015" y="122" text-anchor="middle" font-size="20" fill="#c2410c">运行环境</text>
+                    <text x="1015" y="151" text-anchor="middle" font-size="15" fill="#344054">JDK · Maven · MySQL</text>
+                </a>
+
+                <a href="#api" class="node">
+                    <rect x="900" y="237" width="230" height="96" rx="18" fill="#ffffff" stroke="#7c3aed" stroke-width="3"/>
+                    <text x="1015" y="277" text-anchor="middle" font-size="20" fill="#6d28d9">接口测试</text>
+                    <text x="1015" y="306" text-anchor="middle" font-size="15" fill="#344054">Postman · Token</text>
+                </a>
+
+                <a href="#deploy" class="node">
+                    <rect x="900" y="442" width="230" height="96" rx="18" fill="#ffffff" stroke="#0f766e" stroke-width="3"/>
+                    <text x="1015" y="482" text-anchor="middle" font-size="20" fill="#0f766e">文档部署</text>
+                    <text x="1015" y="511" text-anchor="middle" font-size="15" fill="#344054">Gitee Pages</text>
+                </a>
+            </svg>
+        </div>
+
+    </section>
+
+    <section id="courses">
+        <div class="section-title">
+            <div>
+                <h2>课程章节</h2>
+                <p>每一节课都对应一个独立工程，可单独运行。</p>
+            </div>
+        </div>
+
+        <div class="grid">
+            <article class="card" id="day01">
+                <h3>Day 01 · 自动装配与自定义 Starter</h3>
+                <p>理解 Spring Boot 为什么能做到开箱即用，并完成一个可配置的日志工具 Starter。</p>
+                <details open>
+                    <summary>核心知识点</summary>
+                    <ul>
+                        <li>IoC 与依赖注入</li>
+                        <li>条件装配注解</li>
+                        <li>ConfigurationProperties</li>
+                        <li>AutoConfiguration.imports</li>
+                    </ul>
+                </details>
+                <div class="code">cd day01
+                    mvn spring-boot:run</div>
+            </article>
+
+            <article class="card" id="day02">
+                <h3>Day 02 · MyBatis-Plus 数据持久化</h3>
+                <p>围绕用户查询、分页查询和条件查询，掌握后端项目中的数据访问层写法。</p>
+                <details open>
+                    <summary>核心知识点</summary>
+                    <ul>
+                        <li>Entity / DTO / Mapper / Service / Controller</li>
+                        <li>BaseMapper 与 IService</li>
+                        <li>QueryWrapper 条件查询</li>
+                        <li>Page 分页插件</li>
+                    </ul>
+                </details>
+                <div class="code">cd day02
+                    mvn spring-boot:run</div>
+            </article>
+
+            <article class="card" id="day03">
+                <h3>Day 03 · Sa-Token 认证与鉴权</h3>
+                <p>实现登录认证、Token 校验、角色权限控制和全局异常处理。</p>
+                <details open>
+                    <summary>核心知识点</summary>
+                    <ul>
+                        <li>StpUtil.login()</li>
+                        <li>SaInterceptor 路由拦截</li>
+                        <li>@SaCheckPermission</li>
+                        <li>@SaCheckRole</li>
+                    </ul>
+                </details>
+                <div class="code">cd day03
+                    mvn spring-boot:run</div>
+            </article>
+        </div>
+    </section>
+
+    <section id="run">
+        <div class="section-title">
+            <div>
+                <h2>运行指南</h2>
+                <p>按课程顺序启动，也可以单独运行某一天的工程。</p>
+            </div>
+        </div>
+
+        <div class="timeline">
+            <div class="step">
+                <span class="tag">环境准备</span>
+                <div>安装 JDK 17、Maven 3.6+。Day 02 需要 MySQL 8.0，并提前创建数据库。</div>
+            </div>
+            <div class="step">
+                <span class="tag">启动项目</span>
+                <div class="code">cd day01
+                    mvn spring-boot:run</div>
+            </div>
+            <div class="step" id="api">
+                <span class="tag">接口测试</span>
+                <div>
+                    使用仓库中的 Postman 集合测试接口。
+                    <div class="code">POST http://localhost:8081/user/doLogin?username=admin&password=123456<br>
+                        GET  http://localhost:8888/yyzx/user/page?pageNum=1&pageSize=10</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    集中实习 Spring Boot 后端课程 · 从配置到数据，再到认证鉴权
+</footer>
+</body>
+</html>
