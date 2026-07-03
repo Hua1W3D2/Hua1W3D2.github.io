@@ -1,527 +1,1379 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
-<head>
+  <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>集中实习 Spring Boot 后端课程</title>
+    <title>Spring Boot 后端集中实习课程</title>
     <style>
-        :root {
-            --bg: #f6f8fb;
-            --panel: #ffffff;
-            --text: #1f2937;
-            --muted: #667085;
-            --line: #dbe3ef;
-            --green: #19be6b;
-            --blue: #2f80ed;
-            --orange: #ff8a00;
-            --red: #ef4444;
-            --shadow: 0 18px 45px rgba(20, 40, 80, .10);
+      :root {
+        --bg: #f4f7fb;
+        --panel: #ffffff;
+        --ink: #172033;
+        --text: #344054;
+        --muted: #667085;
+        --line: #d7e0ec;
+        --green: #16a36b;
+        --blue: #2563eb;
+        --red: #dc2626;
+        --amber: #d97706;
+        --teal: #0f766e;
+        --violet: #6d28d9;
+        --shadow: 0 18px 48px rgba(32, 45, 72, 0.11);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        color: var(--text);
+        background: linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.96),
+            rgba(244, 247, 251, 0.92) 36%,
+            #f4f7fb 100%
+          ),
+          linear-gradient(
+            135deg,
+            rgba(22, 163, 107, 0.08),
+            rgba(37, 99, 235, 0.06) 42%,
+            rgba(255, 255, 255, 0) 72%
+          );
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+          "Microsoft YaHei", Arial, sans-serif;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 64px;
+        padding: 0 clamp(18px, 6vw, 88px);
+        background: rgba(255, 255, 255, 0.9);
+        border-bottom: 1px solid rgba(215, 224, 236, 0.82);
+        backdrop-filter: blur(14px);
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 0;
+        color: var(--ink);
+        font-weight: 900;
+        text-decoration: none;
+      }
+
+      .brand-mark {
+        width: 34px;
+        height: 34px;
+        flex: 0 0 auto;
+        display: grid;
+        place-items: center;
+        border-radius: 8px;
+        color: #fff;
+        background: linear-gradient(135deg, var(--green), var(--blue));
+        box-shadow: 0 10px 24px rgba(22, 163, 107, 0.22);
+        font-size: 13px;
+      }
+
+      .brand span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      nav {
+        display: flex;
+        align-items: center;
+        gap: 22px;
+      }
+
+      nav a {
+        color: #475467;
+        font-size: 14px;
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      nav a:hover {
+        color: var(--blue);
+      }
+
+      main {
+        min-height: 100vh;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
+        gap: 36px;
+        align-items: stretch;
+        padding: 68px clamp(18px, 6vw, 88px) 34px;
+      }
+
+      .hero-copy {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .eyebrow {
+        width: fit-content;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 12px;
+        border: 1px solid #bfe6d4;
+        border-radius: 999px;
+        color: #087f46;
+        background: #ecfdf5;
+        font-size: 13px;
+        font-weight: 800;
+      }
+
+      h1 {
+        margin: 18px 0 16px;
+        max-width: 780px;
+        color: var(--ink);
+        font-size: clamp(34px, 4.9vw, 60px);
+        line-height: 1.08;
+        letter-spacing: 0;
+      }
+
+      .lead {
+        max-width: 740px;
+        margin: 0;
+        color: #526070;
+        font-size: 18px;
+        line-height: 1.85;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 28px;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: 0 18px;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        font-weight: 900;
+        text-decoration: none;
+      }
+
+      .button.primary {
+        color: #fff;
+        background: var(--green);
+        box-shadow: 0 12px 24px rgba(22, 163, 107, 0.24);
+      }
+
+      .button.secondary {
+        color: #344054;
+        background: #fff;
+        border-color: var(--line);
+      }
+
+      .overview-panel {
+        display: grid;
+        gap: 14px;
+        align-content: start;
+        padding: 18px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.84);
+        box-shadow: var(--shadow);
+      }
+
+      .overview-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        gap: 16px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .overview-head h2 {
+        margin: 0;
+        color: var(--ink);
+        font-size: 20px;
+      }
+
+      .overview-head p {
+        margin: 6px 0 0;
+        color: var(--muted);
+        line-height: 1.7;
+        font-size: 14px;
+      }
+
+      .stack-badge {
+        flex: 0 0 auto;
+        min-height: 32px;
+        padding: 6px 10px;
+        border-radius: 8px;
+        background: #eef4ff;
+        color: #1d4ed8;
+        font-size: 12px;
+        font-weight: 900;
+      }
+
+      .metric-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .metric {
+        min-height: 78px;
+        padding: 12px;
+        border: 1px solid #e4eaf2;
+        border-radius: 8px;
+        background: #fbfcff;
+      }
+
+      .metric strong {
+        display: block;
+        color: var(--ink);
+        font-size: 22px;
+      }
+
+      .metric span {
+        display: block;
+        margin-top: 6px;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .command {
+        margin: 0;
+        padding: 16px;
+        border-radius: 8px;
+        overflow-x: auto;
+        color: #dcfce7;
+        background: #111827;
+        font: 13px/1.8 Consolas, Monaco, "Courier New", monospace;
+        white-space: pre;
+      }
+
+      section {
+        padding: 38px clamp(18px, 6vw, 88px);
+      }
+
+      .section-title {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 24px;
+        margin-bottom: 20px;
+      }
+
+      .section-title h2 {
+        margin: 0;
+        color: var(--ink);
+        font-size: clamp(25px, 3vw, 34px);
+        line-height: 1.25;
+      }
+
+      .section-title p {
+        max-width: 680px;
+        margin: 8px 0 0;
+        color: var(--muted);
+        line-height: 1.75;
+      }
+
+      .map-shell {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+
+      .map-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--line);
+        color: #475467;
+        font-size: 14px;
+      }
+
+      .map-toolbar strong {
+        color: var(--ink);
+        font-size: 15px;
+      }
+
+      .map-scroll {
+        overflow-x: auto;
+        padding: 14px;
+      }
+
+      svg.course-map {
+        display: block;
+        width: 100%;
+        min-width: 1080px;
+        height: auto;
+      }
+
+      .branch-line {
+        fill: none;
+        stroke: #b6c5d9;
+        stroke-width: 4;
+        stroke-linecap: round;
+      }
+
+      .branch-line.thin {
+        stroke-width: 2.4;
+        stroke: #d2dbe8;
+      }
+
+      .map-node rect,
+      .map-node path {
+        transition: transform 0.18s ease, filter 0.18s ease;
+        filter: drop-shadow(0 8px 14px rgba(33, 48, 78, 0.1));
+      }
+
+      .map-node:hover rect,
+      .map-node:hover path {
+        transform: translateY(-3px);
+        filter: drop-shadow(0 16px 24px rgba(33, 48, 78, 0.18));
+      }
+
+      .map-node text {
+        pointer-events: none;
+        font-weight: 900;
+      }
+
+      .map-node .small {
+        font-weight: 700;
+      }
+
+      .repo-note {
+        margin: 12px 0 0;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.7;
+      }
+
+      .course-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .course-card {
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+        padding: 18px;
+        border: 1px solid var(--line);
+        border-top: 4px solid var(--accent);
+        border-radius: 8px;
+        background: #fff;
+        box-shadow: 0 12px 30px rgba(32, 45, 72, 0.07);
+      }
+
+      .course-card h3 {
+        margin: 0 0 10px;
+        color: var(--ink);
+        font-size: 18px;
+        line-height: 1.42;
+      }
+
+      .course-card p {
+        margin: 0 0 14px;
+        color: var(--muted);
+        line-height: 1.75;
+        font-size: 14px;
+      }
+
+      .tag-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 0 0 16px;
+        padding: 0;
+        list-style: none;
+      }
+
+      .tag-list li {
+        padding: 5px 8px;
+        border-radius: 8px;
+        color: #344054;
+        background: #f2f5f9;
+        font-size: 12px;
+        font-weight: 800;
+      }
+
+      .card-footer {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: auto;
+      }
+
+      .repo-link,
+      .plain-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 36px;
+        padding: 0 12px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 900;
+        text-decoration: none;
+      }
+
+      .repo-link {
+        color: #fff;
+        background: var(--accent);
+      }
+
+      .plain-link {
+        color: #344054;
+        border: 1px solid var(--line);
+        background: #fff;
+      }
+
+      .path {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .path-step {
+        position: relative;
+        min-height: 160px;
+        padding: 18px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+      }
+
+      .path-step b {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 34px;
+        height: 34px;
+        margin-bottom: 14px;
+        border-radius: 8px;
+        color: #fff;
+        background: var(--accent);
+      }
+
+      .path-step h3 {
+        margin: 0 0 8px;
+        color: var(--ink);
+        font-size: 17px;
+      }
+
+      .path-step p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.7;
+        font-size: 14px;
+      }
+
+      .info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+
+      .info-panel {
+        padding: 20px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+      }
+
+      .info-panel h3 {
+        margin: 0 0 12px;
+        color: var(--ink);
+        font-size: 19px;
+      }
+
+      .info-panel ul {
+        margin: 0;
+        padding-left: 20px;
+        color: var(--muted);
+        line-height: 1.85;
+      }
+
+      .repo-table {
+        width: 100%;
+        border-collapse: collapse;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+      }
+
+      .repo-table th,
+      .repo-table td {
+        padding: 13px 14px;
+        border-bottom: 1px solid var(--line);
+        text-align: left;
+        vertical-align: top;
+      }
+
+      .repo-table th {
+        color: var(--ink);
+        background: #f7f9fc;
+        font-size: 14px;
+      }
+
+      .repo-table td {
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.55;
+      }
+
+      .repo-table tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .repo-table code {
+        color: #1d4ed8;
+        font-family: Consolas, Monaco, "Courier New", monospace;
+        word-break: break-all;
+      }
+
+      .info-panel code {
+        color: #1d4ed8;
+        font-family: Consolas, Monaco, "Courier New", monospace;
+      }
+
+      footer {
+        padding: 34px clamp(18px, 6vw, 88px) 56px;
+        color: var(--muted);
+        text-align: center;
+        line-height: 1.7;
+      }
+
+      @media (max-width: 1100px) {
+        .hero,
+        .info-grid {
+          grid-template-columns: 1fr;
         }
 
-        * { box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-        body {
-            margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
-            color: var(--text);
-            background: var(--bg);
+        .course-grid,
+        .path {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
         }
+      }
 
+      @media (max-width: 760px) {
         .topbar {
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 64px;
-            padding: 0 8vw;
-            background: rgba(255,255,255,.88);
-            backdrop-filter: blur(14px);
-            border-bottom: 1px solid rgba(219,227,239,.8);
+          height: 58px;
         }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 800;
+        nav {
+          display: none;
         }
-
-        .logo {
-            width: 34px;
-            height: 34px;
-            border-radius: 10px;
-            display: grid;
-            place-items: center;
-            color: white;
-            background: linear-gradient(135deg, var(--green), var(--blue));
-            box-shadow: 0 10px 24px rgba(25,190,107,.25);
-        }
-
-        nav a {
-            margin-left: 22px;
-            color: #344054;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        nav a:hover { color: var(--green); }
-
         .hero {
-            padding: 78px 8vw 44px;
-            display: grid;
-            grid-template-columns: 1.05fr .95fr;
-            gap: 42px;
-            align-items: center;
+          padding-top: 46px;
         }
-
-        .eyebrow {
-            display: inline-flex;
-            gap: 8px;
-            align-items: center;
-            padding: 7px 12px;
-            border-radius: 999px;
-            background: #e9f9f1;
-            color: #087f46;
-            font-size: 13px;
-            font-weight: 700;
-        }
-
-        h1 {
-            margin: 18px 0 16px;
-            font-size: clamp(36px, 5vw, 62px);
-            line-height: 1.05;
-            letter-spacing: 0;
-        }
-
-        .hero p {
-            max-width: 680px;
-            color: var(--muted);
-            font-size: 18px;
-            line-height: 1.8;
-        }
-
-        .actions {
-            display: flex;
-            gap: 14px;
-            flex-wrap: wrap;
-            margin-top: 28px;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 44px;
-            padding: 0 18px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 800;
-            border: 1px solid transparent;
-        }
-
-        .btn.primary {
-            background: var(--green);
-            color: white;
-            box-shadow: 0 12px 24px rgba(25,190,107,.28);
-        }
-
-        .btn.secondary {
-            background: white;
-            color: #344054;
-            border-color: var(--line);
-        }
-
-        .hero-card {
-            background: var(--panel);
-            border: 1px solid var(--line);
-            border-radius: 18px;
-            padding: 24px;
-            box-shadow: var(--shadow);
-        }
-
-        .terminal {
-            border-radius: 12px;
-            overflow: hidden;
-            background: #0f172a;
-            color: #d1fae5;
-            font-family: Consolas, Monaco, monospace;
-            font-size: 14px;
-        }
-
-        .terminal-head {
-            display: flex;
-            gap: 7px;
-            padding: 12px;
-            background: #111827;
-        }
-
-        .dot { width: 10px; height: 10px; border-radius: 50%; }
-        .dot.red { background: #ff5f56; }
-        .dot.yellow { background: #ffbd2e; }
-        .dot.green { background: #27c93f; }
-
-        .terminal-body {
-            padding: 18px;
-            line-height: 1.9;
-            white-space: pre-wrap;
-        }
-
-        section {
-            padding: 36px 8vw;
+        .metric-grid,
+        .course-grid,
+        .path {
+          grid-template-columns: 1fr;
         }
 
         .section-title {
-            display: flex;
-            align-items: end;
-            justify-content: space-between;
-            gap: 24px;
-            margin-bottom: 18px;
+          display: block;
         }
 
-        .section-title h2 {
-            margin: 0;
-            font-size: 30px;
+        .map-toolbar {
+          align-items: start;
+          flex-direction: column;
         }
 
-        .section-title p {
-            margin: 0;
-            color: var(--muted);
+        .repo-table {
+          display: block;
+          overflow-x: auto;
+          white-space: nowrap;
         }
-
-        .map-wrap {
-            background: white;
-            border: 1px solid var(--line);
-            border-radius: 18px;
-            padding: 18px;
-            box-shadow: var(--shadow);
-            overflow-x: auto;
-        }
-
-        svg {
-            display: block;
-            min-width: 980px;
-            width: 100%;
-            height: auto;
-        }
-
-        .node rect {
-            transition: transform .2s ease, filter .2s ease;
-            filter: drop-shadow(0 8px 18px rgba(30,50,80,.10));
-        }
-
-        .node:hover rect {
-            transform: translateY(-3px);
-            filter: drop-shadow(0 14px 24px rgba(30,50,80,.18));
-        }
-
-        .node text {
-            pointer-events: none;
-            font-weight: 800;
-        }
-
-        .hint {
-            margin-top: 12px;
-            color: var(--muted);
-            font-size: 14px;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 18px;
-        }
-
-        .card {
-            background: white;
-            border: 1px solid var(--line);
-            border-radius: 14px;
-            padding: 22px;
-            box-shadow: 0 12px 28px rgba(20,40,80,.06);
-        }
-
-        .card h3 { margin: 0 0 10px; }
-        .card p { margin: 0; color: var(--muted); line-height: 1.75; }
-
-        details {
-            margin-top: 14px;
-            background: #fbfcff;
-            border: 1px solid var(--line);
-            border-radius: 10px;
-            padding: 14px;
-        }
-
-        summary {
-            cursor: pointer;
-            font-weight: 800;
-        }
-
-        .code {
-            margin-top: 12px;
-            padding: 14px;
-            border-radius: 10px;
-            background: #0f172a;
-            color: #d1fae5;
-            overflow-x: auto;
-            font-family: Consolas, Monaco, monospace;
-            font-size: 13px;
-        }
-
-        .timeline {
-            display: grid;
-            gap: 14px;
-        }
-
-        .step {
-            display: grid;
-            grid-template-columns: 120px 1fr;
-            gap: 18px;
-            align-items: start;
-            background: white;
-            border: 1px solid var(--line);
-            border-radius: 14px;
-            padding: 18px;
-        }
-
-        .tag {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 32px;
-            padding: 0 10px;
-            border-radius: 999px;
-            background: #e9f9f1;
-            color: #087f46;
-            font-weight: 800;
-            font-size: 13px;
-        }
-
-        footer {
-            padding: 34px 8vw 60px;
-            color: var(--muted);
-            text-align: center;
-        }
-
-        @media (max-width: 900px) {
-            .hero { grid-template-columns: 1fr; }
-            nav { display: none; }
-            .grid { grid-template-columns: 1fr; }
-            .step { grid-template-columns: 1fr; }
-        }
+      }
     </style>
-</head>
-
-<body>
-<header class="topbar">
-    <div class="brand">
-        <div class="logo">SB</div>
-        <span>集中实习课程文档</span>
-    </div>
-    <nav>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="返回顶部">
+        <span class="brand-mark">SB</span>
+        <span>Spring Boot 后端集中实习</span>
+      </a>
+      <nav aria-label="页面导航">
         <a href="#map">知识地图</a>
         <a href="#courses">课程章节</a>
-        <a href="#run">运行指南</a>
-        <a href="#deploy">部署说明</a>
-    </nav>
-</header>
+        <a href="#path">学习路径</a>
+        <a href="#run">运行测试</a>
+      </nav>
+    </header>
 
-<main>
-    <section class="hero">
-        <div>
-            <span class="eyebrow">Spring Boot 3 · Java 17 · 后端实习路线</span>
-            <h1>从自动装配到权限控制的后端工程训练</h1>
-            <p>
-                这是一套面向实习课程的 Spring Boot 后端学习项目。课程从自动配置与自定义 Starter 开始，
-                进入 MyBatis-Plus 数据持久化，再完成 Sa-Token 登录认证与接口鉴权。
-            </p>
-            <div class="actions">
-                <a class="btn primary" href="#map">查看知识地图</a>
-                <a class="btn secondary" href="#courses">开始学习</a>
-            </div>
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <span class="eyebrow">Spring Boot 3 · Java 17 · 后端工程实训</span>
+          <h1 id="hero-title">从自动装配到 API 文档的四次课学习路线</h1>
+          <p class="lead">
+            课程把 Spring Boot 的核心能力拆成四个渐进主题：自动配置与自定义
+            Starter、MyBatis-Plus 数据持久化、 Sa-Token 认证鉴权，以及 Swagger /
+            OpenAPI 接口文档。
+          </p>
+          <div class="actions">
+            <a class="button primary" href="#map">查看知识地图</a>
+            <a class="button secondary" href="#courses">浏览四次课</a>
+          </div>
         </div>
 
-        <div class="hero-card">
-            <div class="terminal">
-                <div class="terminal-head">
-                    <span class="dot red"></span>
-                    <span class="dot yellow"></span>
-                    <span class="dot green"></span>
-                </div>
-                <div class="terminal-body">git clone https://gitee.com/flower-dance-butterfly/experi2026.git
-                    cd day01
-                    mvn spring-boot:run
-
-                    # Day02: 数据查询
-                    # Day03: Token 认证 + 权限校验</div>
-            </div>
-        </div>
-    </section>
-
-    <section id="map">
-        <div class="section-title">
+        <aside class="overview-panel" aria-label="课程概览">
+          <div class="overview-head">
             <div>
-                <h2>XMind 风格知识地图</h2>
-                <p>点击节点可跳转到对应课程章节。</p>
+              <h2>课程总览</h2>
+              <p>适合作为 GitHub Pages / Gitee Pages 的课程入口页。</p>
             </div>
+            <span class="stack-badge">Spring Boot 3.x</span>
+          </div>
+          <div class="metric-grid">
+            <div class="metric">
+              <strong>4</strong>
+              <span>次课主题</span>
+            </div>
+            <div class="metric">
+              <strong>17</strong>
+              <span>Java 最低版本</span>
+            </div>
+            <div class="metric">
+              <strong>3</strong>
+              <span>后端核心层次</span>
+            </div>
+          </div>
+          <pre class="command">
+git clone https://gitee.com/flower-dance-butterfly/experi2026.git
+cd day01
+mvn spring-boot:run</pre
+          >
+        </aside>
+      </section>
+
+      <section id="map" aria-labelledby="map-title">
+        <div class="section-title">
+          <div>
+            <h2 id="map-title">XMind 风格知识地图</h2>
+          </div>
         </div>
 
-        <div class="map-wrap">
-            <svg viewBox="0 0 1180 620" role="img" aria-label="Spring Boot 后端实习课程知识地图">
-                <defs>
-                    <linearGradient id="centerGrad" x1="0" x2="1">
-                        <stop offset="0%" stop-color="#19be6b"/>
-                        <stop offset="100%" stop-color="#2f80ed"/>
-                    </linearGradient>
-                </defs>
+        <div class="map-shell">
+          <div class="map-toolbar">
+            <strong>Spring Boot 后端实习知识地图</strong>
+          </div>
+          <div class="map-scroll">
+            <svg
+              class="course-map"
+              viewBox="0 0 1280 760"
+              role="img"
+              aria-label="Spring Boot 四次课知识地图"
+            >
+              <defs>
+                <linearGradient id="centerGrad" x1="0" x2="1">
+                  <stop offset="0%" stop-color="#16a36b" />
+                  <stop offset="100%" stop-color="#2563eb" />
+                </linearGradient>
+              </defs>
 
-                <path d="M590 305 C430 210, 330 170, 220 155" stroke="#a7b7cc" stroke-width="4" fill="none"/>
-                <path d="M590 305 C430 315, 330 310, 220 305" stroke="#a7b7cc" stroke-width="4" fill="none"/>
-                <path d="M590 305 C430 420, 330 460, 220 465" stroke="#a7b7cc" stroke-width="4" fill="none"/>
+              <path
+                class="branch-line"
+                d="M640 360 C480 190, 330 120, 178 118"
+              />
+              <path
+                class="branch-line"
+                d="M640 360 C470 315, 318 298, 178 300"
+              />
+              <path
+                class="branch-line"
+                d="M640 360 C480 510, 330 586, 178 592"
+              />
+              <path
+                class="branch-line"
+                d="M640 360 C800 206, 950 136, 1102 132"
+              />
+              <path
+                class="branch-line"
+                d="M640 360 C802 334, 954 330, 1102 332"
+              />
+              <path
+                class="branch-line"
+                d="M640 360 C802 506, 950 586, 1102 594"
+              />
 
-                <path d="M590 305 C750 190, 850 145, 970 130" stroke="#a7b7cc" stroke-width="4" fill="none"/>
-                <path d="M590 305 C760 285, 860 285, 980 285" stroke="#a7b7cc" stroke-width="4" fill="none"/>
-                <path d="M590 305 C750 420, 850 475, 970 490" stroke="#a7b7cc" stroke-width="4" fill="none"/>
+              <path
+                class="branch-line thin"
+                d="M178 118 C144 92, 116 82, 76 82"
+              />
+              <path
+                class="branch-line thin"
+                d="M178 118 C142 128, 116 146, 76 168"
+              />
+              <path
+                class="branch-line thin"
+                d="M178 300 C142 276, 116 262, 76 248"
+              />
+              <path
+                class="branch-line thin"
+                d="M178 300 C142 324, 116 342, 76 366"
+              />
+              <path
+                class="branch-line thin"
+                d="M1102 132 C1140 104, 1166 92, 1210 86"
+              />
+              <path
+                class="branch-line thin"
+                d="M1102 132 C1140 154, 1168 172, 1210 194"
+              />
+              <path
+                class="branch-line thin"
+                d="M1102 332 C1140 306, 1168 292, 1210 284"
+              />
+              <path
+                class="branch-line thin"
+                d="M1102 332 C1140 356, 1168 374, 1210 396"
+              />
 
-                <a href="#courses" class="node">
-                    <rect x="420" y="245" width="340" height="120" rx="22" fill="url(#centerGrad)"/>
-                    <text x="590" y="295" text-anchor="middle" font-size="26" fill="#fff">Spring Boot 后端实习</text>
-                    <text x="590" y="330" text-anchor="middle" font-size="15" fill="#e8fff5">自动配置 · 数据持久化 · 认证鉴权</text>
-                </a>
+              <a
+                class="map-node"
+                href="https://gitee.com/flower-dance-butterfly/experi2026/tree/master"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <rect
+                  x="450"
+                  y="288"
+                  width="380"
+                  height="144"
+                  rx="28"
+                  fill="url(#centerGrad)"
+                />
+                <text
+                  x="640"
+                  y="346"
+                  text-anchor="middle"
+                  font-size="28"
+                  fill="#ffffff"
+                >
+                  Spring Boot 后端实习
+                </text>
+                <text
+                  class="small"
+                  x="640"
+                  y="382"
+                  text-anchor="middle"
+                  font-size="16"
+                  fill="#e8fff5"
+                >
+                  自动配置 · 数据持久化 · 认证鉴权 · API 文档
+                </text>
+              </a>
 
-                <a href="#day01" class="node">
-                    <rect x="60" y="105" width="250" height="96" rx="18" fill="#ffffff" stroke="#19be6b" stroke-width="3"/>
-                    <text x="185" y="145" text-anchor="middle" font-size="20" fill="#087f46">Day 01</text>
-                    <text x="185" y="174" text-anchor="middle" font-size="15" fill="#344054">自动装配与 Starter</text>
-                </a>
+              <a
+                class="map-node"
+                href="https://gitee.com/flower-dance-butterfly/experi2026/tree/master/day01"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <rect
+                  x="86"
+                  y="66"
+                  width="270"
+                  height="104"
+                  rx="18"
+                  fill="#ffffff"
+                  stroke="#16a36b"
+                  stroke-width="3"
+                />
+                <text
+                  x="221"
+                  y="109"
+                  text-anchor="middle"
+                  font-size="21"
+                  fill="#087f46"
+                >
+                  Day 01
+                </text>
+                <text
+                  class="small"
+                  x="221"
+                  y="140"
+                  text-anchor="middle"
+                  font-size="15"
+                  fill="#344054"
+                >
+                  自动装配与 Starter
+                </text>
+              </a>
 
-                <a href="#day02" class="node">
-                    <rect x="60" y="257" width="250" height="96" rx="18" fill="#ffffff" stroke="#2f80ed" stroke-width="3"/>
-                    <text x="185" y="297" text-anchor="middle" font-size="20" fill="#1d4ed8">Day 02</text>
-                    <text x="185" y="326" text-anchor="middle" font-size="15" fill="#344054">MyBatis-Plus 整合</text>
-                </a>
+              <a
+                class="map-node"
+                href="https://gitee.com/flower-dance-butterfly/experi2026/tree/master/day02"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <rect
+                  x="86"
+                  y="248"
+                  width="270"
+                  height="104"
+                  rx="18"
+                  fill="#ffffff"
+                  stroke="#2563eb"
+                  stroke-width="3"
+                />
+                <text
+                  x="221"
+                  y="291"
+                  text-anchor="middle"
+                  font-size="21"
+                  fill="#1d4ed8"
+                >
+                  Day 02
+                </text>
+                <text
+                  class="small"
+                  x="221"
+                  y="322"
+                  text-anchor="middle"
+                  font-size="15"
+                  fill="#344054"
+                >
+                  MyBatis-Plus 整合
+                </text>
+              </a>
 
-                <a href="#day03" class="node">
-                    <rect x="60" y="417" width="250" height="96" rx="18" fill="#ffffff" stroke="#ef4444" stroke-width="3"/>
-                    <text x="185" y="457" text-anchor="middle" font-size="20" fill="#b91c1c">Day 03</text>
-                    <text x="185" y="486" text-anchor="middle" font-size="15" fill="#344054">Sa-Token 认证鉴权</text>
-                </a>
+              <a
+                class="map-node"
+                href="https://gitee.com/flower-dance-butterfly/experi2026/tree/master/day03"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <rect
+                  x="86"
+                  y="540"
+                  width="270"
+                  height="104"
+                  rx="18"
+                  fill="#ffffff"
+                  stroke="#dc2626"
+                  stroke-width="3"
+                />
+                <text
+                  x="221"
+                  y="583"
+                  text-anchor="middle"
+                  font-size="21"
+                  fill="#b91c1c"
+                >
+                  Day 03
+                </text>
+                <text
+                  class="small"
+                  x="221"
+                  y="614"
+                  text-anchor="middle"
+                  font-size="15"
+                  fill="#344054"
+                >
+                  Sa-Token 认证鉴权
+                </text>
+              </a>
 
-                <a href="#run" class="node">
-                    <rect x="900" y="82" width="230" height="96" rx="18" fill="#ffffff" stroke="#ff8a00" stroke-width="3"/>
-                    <text x="1015" y="122" text-anchor="middle" font-size="20" fill="#c2410c">运行环境</text>
-                    <text x="1015" y="151" text-anchor="middle" font-size="15" fill="#344054">JDK · Maven · MySQL</text>
-                </a>
+              <a
+                class="map-node"
+                href="https://gitee.com/flower-dance-butterfly/experi2026/tree/master/day04"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <rect
+                  x="924"
+                  y="80"
+                  width="270"
+                  height="104"
+                  rx="18"
+                  fill="#ffffff"
+                  stroke="#d97706"
+                  stroke-width="3"
+                />
+                <text
+                  x="1059"
+                  y="123"
+                  text-anchor="middle"
+                  font-size="21"
+                  fill="#b45309"
+                >
+                  Day 04
+                </text>
+                <text
+                  class="small"
+                  x="1059"
+                  y="154"
+                  text-anchor="middle"
+                  font-size="15"
+                  fill="#344054"
+                >
+                  Swagger + Springdoc
+                </text>
+              </a>
 
-                <a href="#api" class="node">
-                    <rect x="900" y="237" width="230" height="96" rx="18" fill="#ffffff" stroke="#7c3aed" stroke-width="3"/>
-                    <text x="1015" y="277" text-anchor="middle" font-size="20" fill="#6d28d9">接口测试</text>
-                    <text x="1015" y="306" text-anchor="middle" font-size="15" fill="#344054">Postman · Token</text>
-                </a>
+              <a
+                class="map-node"
+                href="/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <rect
+                  x="924"
+                  y="280"
+                  width="270"
+                  height="104"
+                  rx="18"
+                  fill="#ffffff"
+                  stroke="#0f766e"
+                  stroke-width="3"
+                />
+                <text
+                  x="1059"
+                  y="323"
+                  text-anchor="middle"
+                  font-size="21"
+                  fill="#0f766e"
+                >
+                  运行环境
+                </text>
+                <text
+                  class="small"
+                  x="1059"
+                  y="354"
+                  text-anchor="middle"
+                  font-size="15"
+                  fill="#344054"
+                >
+                  JDK · Maven · MySQL
+                </text>
+              </a>
 
-                <a href="#deploy" class="node">
-                    <rect x="900" y="442" width="230" height="96" rx="18" fill="#ffffff" stroke="#0f766e" stroke-width="3"/>
-                    <text x="1015" y="482" text-anchor="middle" font-size="20" fill="#0f766e">文档部署</text>
-                    <text x="1015" y="511" text-anchor="middle" font-size="15" fill="#344054">Gitee Pages</text>
-                </a>
+              <a
+                class="map-node"
+                href="/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <rect
+                  x="924"
+                  y="542"
+                  width="270"
+                  height="104"
+                  rx="18"
+                  fill="#ffffff"
+                  stroke="#6d28d9"
+                  stroke-width="3"
+                />
+                <text
+                  x="1059"
+                  y="585"
+                  text-anchor="middle"
+                  font-size="21"
+                  fill="#6d28d9"
+                >
+                  接口实践
+                </text>
+                <text
+                  class="small"
+                  x="1059"
+                  y="616"
+                  text-anchor="middle"
+                  font-size="15"
+                  fill="#344054"
+                >
+                  Postman · Token · Swagger UI
+                </text>
+              </a>
+
+              <rect
+                x="16"
+                y="62"
+                width="110"
+                height="42"
+                rx="10"
+                fill="#ecfdf5"
+                stroke="#bbf7d0"
+              />
+              <text
+                x="71"
+                y="88"
+                text-anchor="middle"
+                font-size="13"
+                fill="#087f46"
+              >
+                条件装配
+              </text>
+              <rect
+                x="16"
+                y="150"
+                width="126"
+                height="42"
+                rx="10"
+                fill="#ecfdf5"
+                stroke="#bbf7d0"
+              />
+              <text
+                x="79"
+                y="176"
+                text-anchor="middle"
+                font-size="13"
+                fill="#087f46"
+              >
+                配置属性绑定
+              </text>
+              <rect
+                x="16"
+                y="228"
+                width="118"
+                height="42"
+                rx="10"
+                fill="#eef4ff"
+                stroke="#bfdbfe"
+              />
+              <text
+                x="75"
+                y="254"
+                text-anchor="middle"
+                font-size="13"
+                fill="#1d4ed8"
+              >
+                分页插件
+              </text>
+              <rect
+                x="16"
+                y="344"
+                width="128"
+                height="42"
+                rx="10"
+                fill="#eef4ff"
+                stroke="#bfdbfe"
+              />
+              <text
+                x="80"
+                y="370"
+                text-anchor="middle"
+                font-size="13"
+                fill="#1d4ed8"
+              >
+                QueryWrapper
+              </text>
+              <rect
+                x="1138"
+                y="64"
+                width="122"
+                height="42"
+                rx="10"
+                fill="#fff7ed"
+                stroke="#fed7aa"
+              />
+              <text
+                x="1199"
+                y="90"
+                text-anchor="middle"
+                font-size="13"
+                fill="#b45309"
+              >
+                OpenAPI
+              </text>
+              <rect
+                x="1130"
+                y="174"
+                width="130"
+                height="42"
+                rx="10"
+                fill="#fff7ed"
+                stroke="#fed7aa"
+              />
+              <text
+                x="1195"
+                y="200"
+                text-anchor="middle"
+                font-size="13"
+                fill="#b45309"
+              >
+                Swagger UI
+              </text>
+              <rect
+                x="1132"
+                y="264"
+                width="128"
+                height="42"
+                rx="10"
+                fill="#f0fdfa"
+                stroke="#99f6e4"
+              />
+              <text
+                x="1196"
+                y="290"
+                text-anchor="middle"
+                font-size="13"
+                fill="#0f766e"
+              >
+                端口与配置
+              </text>
+              <rect
+                x="1120"
+                y="374"
+                width="140"
+                height="42"
+                rx="10"
+                fill="#f5f3ff"
+                stroke="#ddd6fe"
+              />
+              <text
+                x="1190"
+                y="400"
+                text-anchor="middle"
+                font-size="13"
+                fill="#6d28d9"
+              >
+                权限接口测试
+              </text>
             </svg>
+          </div>
         </div>
+      </section>
 
-    </section>
-
-    <section id="courses">
+      <section id="courses" aria-labelledby="courses-title">
         <div class="section-title">
-            <div>
-                <h2>课程章节</h2>
-                <p>每一节课都对应一个独立工程，可单独运行。</p>
+          <div>
+            <h2 id="courses-title">四次课内容</h2>
+            <p>
+              每次课聚焦一个后端工程能力点，从框架原理到接口文档，逐步拼成完整的
+              Spring Boot 实训路线。
+            </p>
+          </div>
+        </div>
+
+        <div class="course-grid">
+          <article
+            class="course-card"
+            id="day01"
+            style="--accent: var(--green)"
+          >
+            <h3>Day 01 · 自动装配与自定义 Starter</h3>
+            <p>
+              从传统 Spring 配置痛点切入，理解 IoC、依赖注入、条件装配和 Spring
+              Boot 3 自动配置注册机制。
+            </p>
+            <ul class="tag-list">
+              <li>IoC / DI</li>
+              <li>@Conditional</li>
+              <li>@ConfigurationProperties</li>
+              <li>AutoConfiguration.imports</li>
+            </ul>
+            <div class="card-footer">
+              <a
+                class="repo-link"
+                href="https://gitee.com/flower-dance-butterfly/experi2026/tree/master/day01"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Gitee 仓库</a
+              >
+              <a class="plain-link" href="#path">学习路径</a>
             </div>
+          </article>
+
+          <article class="course-card" id="day02" style="--accent: var(--blue)">
+            <h3>Day 02 · Spring Boot 整合 MyBatis-Plus</h3>
+            <p>
+              围绕用户登录、分页查询和条件查询，掌握
+              Entity、DTO、Mapper、Service、Controller 的常见组织方式。
+            </p>
+            <ul class="tag-list">
+              <li>BaseMapper</li>
+              <li>IService</li>
+              <li>QueryWrapper</li>
+              <li>Page 分页</li>
+            </ul>
+            <div class="card-footer">
+              <a
+                class="repo-link"
+                href="https://gitee.com/flower-dance-butterfly/experi2026/tree/master/day02"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Gitee 仓库</a
+              >
+              <a class="plain-link" href="#run">接口测试</a>
+            </div>
+          </article>
+
+          <article class="course-card" id="day03" style="--accent: var(--red)">
+            <h3>Day 03 · Sa-Token 认证与鉴权</h3>
+            <p>
+              完成登录认证、Token
+              校验、角色权限控制、注解鉴权和全局异常处理，建立权限系统的基本模型。
+            </p>
+            <ul class="tag-list">
+              <li>StpUtil.login</li>
+              <li>SaInterceptor</li>
+              <li>@SaCheckPermission</li>
+              <li>@SaCheckRole</li>
+            </ul>
+            <div class="card-footer">
+              <a
+                class="repo-link"
+                href="https://gitee.com/flower-dance-butterfly/experi2026/tree/master/day03"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Gitee 仓库</a
+              >
+              <a class="plain-link" href="#run">Token 测试</a>
+            </div>
+          </article>
+
+          <article
+            class="course-card"
+            id="day04"
+            style="--accent: var(--amber)"
+          >
+            <h3>Day 04 · Swagger + Spring Boot</h3>
+            <p>
+              使用 Springdoc OpenAPI 自动生成接口文档，理解 Swagger
+              UI、接口分组、参数说明与在线调试流程。
+            </p>
+            <ul class="tag-list">
+              <li>OpenAPI</li>
+              <li>Springdoc</li>
+              <li>@Operation</li>
+              <li>Swagger UI</li>
+            </ul>
+            <div class="card-footer">
+              <a
+                class="repo-link"
+                href="https://gitee.com/flower-dance-butterfly/experi2026/tree/master/day04"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Gitee 仓库</a
+              >
+              <a class="plain-link" href="#run">文档入口</a>
+            </div>
+          </article>
         </div>
+      </section>
 
-        <div class="grid">
-            <article class="card" id="day01">
-                <h3>Day 01 · 自动装配与自定义 Starter</h3>
-                <p>理解 Spring Boot 为什么能做到开箱即用，并完成一个可配置的日志工具 Starter。</p>
-                <details open>
-                    <summary>核心知识点</summary>
-                    <ul>
-                        <li>IoC 与依赖注入</li>
-                        <li>条件装配注解</li>
-                        <li>ConfigurationProperties</li>
-                        <li>AutoConfiguration.imports</li>
-                    </ul>
-                </details>
-                <div class="code">cd day01
-                    mvn spring-boot:run</div>
-            </article>
-
-            <article class="card" id="day02">
-                <h3>Day 02 · MyBatis-Plus 数据持久化</h3>
-                <p>围绕用户查询、分页查询和条件查询，掌握后端项目中的数据访问层写法。</p>
-                <details open>
-                    <summary>核心知识点</summary>
-                    <ul>
-                        <li>Entity / DTO / Mapper / Service / Controller</li>
-                        <li>BaseMapper 与 IService</li>
-                        <li>QueryWrapper 条件查询</li>
-                        <li>Page 分页插件</li>
-                    </ul>
-                </details>
-                <div class="code">cd day02
-                    mvn spring-boot:run</div>
-            </article>
-
-            <article class="card" id="day03">
-                <h3>Day 03 · Sa-Token 认证与鉴权</h3>
-                <p>实现登录认证、Token 校验、角色权限控制和全局异常处理。</p>
-                <details open>
-                    <summary>核心知识点</summary>
-                    <ul>
-                        <li>StpUtil.login()</li>
-                        <li>SaInterceptor 路由拦截</li>
-                        <li>@SaCheckPermission</li>
-                        <li>@SaCheckRole</li>
-                    </ul>
-                </details>
-                <div class="code">cd day03
-                    mvn spring-boot:run</div>
-            </article>
-        </div>
-    </section>
-
-    <section id="run">
+      <section id="path" aria-labelledby="path-title">
         <div class="section-title">
-            <div>
-                <h2>运行指南</h2>
-                <p>按课程顺序启动，也可以单独运行某一天的工程。</p>
-            </div>
+          <div>
+            <h2 id="path-title">学习路径</h2>
+            <p>
+              四次课的顺序不是简单并列，而是从框架机制、数据访问、安全控制到接口协作的递进。
+            </p>
+          </div>
         </div>
 
-        <div class="timeline">
-            <div class="step">
-                <span class="tag">环境准备</span>
-                <div>安装 JDK 17、Maven 3.6+。Day 02 需要 MySQL 8.0，并提前创建数据库。</div>
-            </div>
-            <div class="step">
-                <span class="tag">启动项目</span>
-                <div class="code">cd day01
-                    mvn spring-boot:run</div>
-            </div>
-            <div class="step" id="api">
-                <span class="tag">接口测试</span>
-                <div>
-                    使用仓库中的 Postman 集合测试接口。
-                    <div class="code">POST http://localhost:8081/user/doLogin?username=admin&password=123456<br>
-                        GET  http://localhost:8888/yyzx/user/page?pageNum=1&pageSize=10</div>
-                </div>
-            </div>
+        <div class="path">
+          <div class="path-step" style="--accent: var(--green)">
+            <b>1</b>
+            <h3>理解框架为什么能少配置</h3>
+            <p>
+              从 Spring Boot 自动配置、条件装配和 Starter
+              入手，先弄清楚开箱即用背后的机制。
+            </p>
+          </div>
+          <div class="path-step" style="--accent: var(--blue)">
+            <b>2</b>
+            <h3>完成数据访问层闭环</h3>
+            <p>
+              把用户实体、查询参数、分页结果和 Controller 接口串起来，形成标准
+              CRUD 思路。
+            </p>
+          </div>
+          <div class="path-step" style="--accent: var(--red)">
+            <b>3</b>
+            <h3>给接口加上身份边界</h3>
+            <p>
+              通过 Token、路由拦截、角色与权限注解，区分认证和鉴权两个不同问题。
+            </p>
+          </div>
+          <div class="path-step" style="--accent: var(--amber)">
+            <b>4</b>
+            <h3>让接口可以被协作和测试</h3>
+            <p>
+              使用 Swagger UI 展示、分组和调试接口，减少前后端沟通中的信息落差。
+            </p>
+          </div>
         </div>
-    </section>
+      </section>
 
-</main>
+      <section id="run" aria-labelledby="run-title">
+        <div class="section-title">
+          <div>
+            <h2 id="run-title">运行与接口测试</h2>
+            <p>
+              四个工程都以 Maven 启动为主，Day02 需要数据库，Day03 和 Day04
+              重点关注接口调用体验。
+            </p>
+          </div>
+        </div>
 
-<footer>
-    集中实习 Spring Boot 后端课程 · 从配置到数据，再到认证鉴权
-</footer>
-</body>
+        <div class="info-grid">
+          <div class="info-panel">
+            <h3>环境准备</h3>
+            <ul>
+              <li>JDK 17 或更高版本</li>
+              <li>Maven 3.6+</li>
+              <li>Day02 使用 MySQL 8.0，并创建 <代码>yyzx</代码> 数据库</li>
+              <li>
+                Day04 默认 Swagger UI 地址：<代码
+                  >http://localhost:8889/swagger-ui.html</代码
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="info-panel">
+            <h3>常用接口</h3>
+            <pre class="command">
+# Day02 分页查询
+GET http://localhost:8888/yyzx/user/page?pageNum=1&pageSize=3
+
+# Day03 管理员登录
+POST http://localhost:8081/user/doLogin?username=admin&password=123456
+
+# Day04 Swagger UI
+http://localhost:8889/swagger-ui.html</pre
+            >
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      Spring Boot 后端集中实习课程 · 自动配置、数据持久化、认证鉴权、接口文档
+    </footer>
+  </内容>
 </html>
